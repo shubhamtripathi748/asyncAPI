@@ -90,7 +90,28 @@ run our store procedure
 price_index is the table name 
 Exec import_files 'C:\ImportingFilesToDB\NewFiles\','*.csv','price_index'
 
+-----------------------------------------------------
 
+SHOW VARIABLES LIKE "secure_file_priv";
+
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/test.csv'
+    INTO TABLE efr
+    FIELDS TERMINATED BY ',' -- Change the delimiter if needed
+    LINES TERMINATED BY '\n' -- Change the line terminator if needed
+    IGNORE 1 LINES; -- Skip the header row if your CSV has headers
+
+    SET SESSION sql_mode = '';
+	SET SESSION secure_file_priv=''
+	
+	
+	
+15:34:29	LOAD DATA LOCAL INFILE 'D:/Softwares/efr/test.csv'     INTO TABLE efr     FIELDS TERMINATED BY ',' -- Change the delimiter if needed     LINES TERMINATED BY '\n' -- Change the line terminator if needed     IGNORE 1 LINES	Error Code: 3948. Loading local data is disabled; this must be enabled on both the client and server sides	0.047 sec
+	
+
+	
+	
+	
 
 
 
