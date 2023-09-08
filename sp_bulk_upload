@@ -1,0 +1,97 @@
+c://ImportingFilesToDB/newfiles
+c://ImportingFilesToDB/Archive
+
+below table should have same schema as csv file
+create table efr_detail_staging 
+
+
+
+create a table for that record is being processed
+
+create table files_logtable
+(id int ,filename varchar,date_created datetime)
+
+create procedure import_files 
+@filepath varchar(500),@pattern varchar(100),@tablename varchar(100)
+AS
+
+BEGIN
+
+Declare @Query varchar(100),@moveProcessed varchar(1000)
+
+CREATE TABLE #x(name varchar(200))
+
+set @query='master.dbo.xp_cmdshell  "dir '+@filepath+@pattern+' /b"' 
+
+insert #x exec(@query)
+
+delete from #x where name IS NULL
+
+SELECT INDENTITY(1,1)AS ID,name into #y from #x
+
+drop table #x
+
+
+Declare @max1 int,@count1 int,@filename varchar(200)
+
+set @max1=(select max(ID) from #y)
+
+set @count1=0
+
+while @count1<@max1
+BEGIN
+
+SET @count1=@count1+1
+
+SET @filename=(select name from #y where [id]=@count1) 
+
+//read content of file and insert into db
+
+set @query='BULK INSERT '+@tablename+' FROM "'+@filepath+@filename+'" WITH(FIELDTERMINATOR= '','',FIRSTROW=1,ROWTERMINATOR=''\n'')'
+
+EXEC (@query)
+
+//record the file into log table
+
+insert into file_logtable(filename) select @filename
+
+set @moveProcessed='MOVE "'+@filepath+@filename+'" C:\ImportingFilesToDB\Archive\"'+SUBSTRING(@Filename,1,LEN(@Filename)-4+'_'+cast(FORMAT(getdate(),'yyyyMMddHHmmss') as varchar)+'.csv"')
+
+EXEC master xp_cmdshell @moveProcessed
+
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+run our store procedure
+price_index is the table name 
+Exec import_files 'C:\ImportingFilesToDB\NewFiles\','*.csv','price_index'
+
+
+
+
+
+
