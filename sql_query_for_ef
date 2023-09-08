@@ -1,0 +1,54 @@
+
+-- Start a transaction
+START TRANSACTION;
+
+-- Select data from the source table
+SELECT id, column1, column2
+FROM source_table;
+
+-- Check if each row from the source table exists in the destination table
+FOR EACH ROW IN RESULT OF SELECT:
+    IF NOT EXISTS (SELECT * FROM destination_table WHERE id = ROW.id) THEN
+        -- If not present, insert it into the destination table
+        INSERT INTO destination_table (id, column1, column2)
+        VALUES (ROW.id, ROW.column1, ROW.column2);
+    END IF;
+END FOR;
+
+-- Commit the transaction
+COMMIT;
+
+-------------
+DELIMITER //
+CREATE PROCEDURE CopyDataIfNotExists()
+BEGIN
+    -- Declare variables for the columns you want to copy
+    DECLARE source_id INT;
+    DECLARE source_column1 VARCHAR(255); -- Change data types as needed
+    DECLARE source_column2 VARCHAR(255); -- Change data types as needed
+
+    -- Cursor to iterate through the source_table
+    DECLARE done INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT id, column1, column2 FROM source_table;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+
+    -- Loop through the source_table rows
+    read_loop: LOOP
+        FETCH cur INTO source_id, source_column1, source_column2;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Check if the data exists in the destination_table
+        IF NOT EXISTS (SELECT * FROM destination_table WHERE id = source_id) THEN
+            -- If not present, insert it into the destination_table
+            INSERT INTO destination_table (id, column1, column2)
+            VALUES (source_id, source_column1, source_column2);
+        END IF;
+    END LOOP;
+
+    CLOSE cur;
+END //
+DELIMITER ;
