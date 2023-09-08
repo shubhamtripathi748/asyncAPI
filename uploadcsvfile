@@ -1,0 +1,25 @@
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@RestController
+@RequestMapping("/api")
+public class FileUploadController {
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadCSVFile(@RequestParam("file") MultipartFile file) {
+        try {
+            // Check if the uploaded file is empty
+            if (file.isEmpty()) {
+                return new ResponseEntity<>("Please select a file to upload.", HttpStatus.BAD_REQUEST);
+            }
+
+            // Process the CSV file (you can parse and handle the data here)
+            // For demonstration, we'll just return a success message
+            return new ResponseEntity<>("File uploaded successfully.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to upload the file: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
