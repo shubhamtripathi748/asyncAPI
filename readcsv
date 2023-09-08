@@ -1,0 +1,60 @@
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
+import org.springframework.stereotype.Service;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+
+@Service
+public class CSVService {
+
+    public List<CSVData> extractDataFromCSV(String filePath) throws IOException, CsvException {
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            // Read all rows from the CSV file
+            List<String[]> rows = reader.readAll();
+
+            // Parse the rows into your CSVData objects
+            List<CSVData> csvDataList = parseCSVData(rows);
+
+            return csvDataList;
+        }
+    }
+
+    private List<CSVData> parseCSVData(List<String[]> rows) {
+        // Implement your parsing logic here to create CSVData objects
+        // based on the rows from the CSV file.
+        // Iterate through rows, create CSVData objects, and add them to a list.
+        // Example:
+        // List<CSVData> csvDataList = new ArrayList<>();
+        // for (String[] row : rows) {
+        //     CSVData csvData = new CSVData();
+        //     csvData.setColumn1(row[0]);
+        //     csvData.setColumn2(row[1]);
+        //     // Set other fields
+        //     csvDataList.add(csvData);
+        // }
+        // return csvDataList;
+
+        // Replace this example with your specific parsing logic.
+        return null;
+    }
+}
+----------------------------
+public class CSVData {
+    private String column1;
+    private String column2;
+    // Add more fields as needed
+    
+    // Getters and setters
+}
+
+--------------------
+<dependency>
+    <groupId>com.opencsv</groupId>
+    <artifactId>opencsv</artifactId>
+    <version>5.6</version> <!-- Use the latest version available -->
+</dependency>
+
+---------------------
+implementation 'com.opencsv:opencsv:5.6' // Use the latest version available
+
