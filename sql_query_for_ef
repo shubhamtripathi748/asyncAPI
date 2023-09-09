@@ -1,3 +1,10 @@
+CREATE TABLE error_log (
+    error_id INT AUTO_INCREMENT PRIMARY KEY,
+    error_message TEXT,
+    error_code VARCHAR(255),
+    error_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+----------------------------------
 DELIMITER //
 
 CREATE PROCEDURE MyProcedure()
