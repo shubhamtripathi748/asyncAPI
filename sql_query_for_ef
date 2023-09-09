@@ -1,4 +1,39 @@
 DELIMITER //
+CREATE PROCEDURE ConvertAndStoreDatetime()
+BEGIN
+    -- Declare variables for the datetime conversion
+    DECLARE source_datetime VARCHAR(19);
+    DECLARE formatted_datetime DATETIME;
+
+    -- Cursor to iterate through the table
+    DECLARE done INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT datetime_string FROM my_table;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+
+    -- Loop through the table rows
+    read_loop: LOOP
+        FETCH cur INTO source_datetime;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Convert the VARCHAR datetime to DATETIME format
+        SET formatted_datetime = STR_TO_DATE(source_datetime, '%Y-%m-%d %H:%i:%s');
+
+        -- Insert or update the formatted datetime in the table
+        UPDATE my_table
+        SET formatted_datetime = formatted_datetime
+        WHERE datetime_string = source_datetime;
+    END LOOP;
+
+    CLOSE cur;
+END //
+DELIMITER ;
+
+
+DELIMITER //
 CREATE PROCEDURE ConvertAndStoreDate()
 BEGIN
     -- Declare variables for the date conversion
