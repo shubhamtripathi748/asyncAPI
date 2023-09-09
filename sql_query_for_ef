@@ -1,5 +1,33 @@
-DECLARE my_string_constant VARCHAR(255) DEFAULT 'This is a constant string';
+DELIMITER //
 
+CREATE PROCEDURE MyProcedure()
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Error occurred, insert error information into the error log table
+        INSERT INTO error_log (error_message, error_code)
+        VALUES (CONCAT('Error: ', SQLSTATE), SQLSTATE);
+    END;
+
+    -- Your main procedure code here
+    -- ...
+    -- If an error occurs, use SIGNAL SQLSTATE to raise an exception
+    IF some_condition THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Custom error message';
+    END IF;
+
+    -- ...
+    -- Continue with your procedure
+END //
+
+DELIMITER ;
+
+
+
+
+---------------------------------------------------------------------------
+DECLARE my_string_constant VARCHAR(255) DEFAULT 'This is a constant string';
+-----------------------------------------------------------------------------------
 DELIMITER //
 CREATE PROCEDURE ConvertAndStoreDatetime()
 BEGIN
