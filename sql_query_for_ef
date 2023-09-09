@@ -2,6 +2,39 @@ DELIMITER //
 
 CREATE PROCEDURE MyProcedure()
 BEGIN
+    DECLARE my_boolean INT;
+
+    -- Set to TRUE (1)
+    SET my_boolean = 1;
+
+    -- Check the boolean variable
+    IF my_boolean = 1 THEN
+        -- Do something if it's TRUE
+    ELSE
+        -- Do something if it's FALSE
+    END IF;
+    
+    -- You can also use boolean variables in conditions
+    IF my_boolean THEN
+        -- Do something if it's TRUE
+    ELSE
+        -- Do something if it's FALSE
+    END IF;
+    
+    -- Reset to FALSE (0)
+    SET my_boolean = 0;
+END //
+
+DELIMITER ;
+
+
+
+
+-------------------------
+DELIMITER //
+
+CREATE PROCEDURE MyProcedure()
+BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         -- Code to handle the exception goes here
