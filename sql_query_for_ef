@@ -4,6 +4,35 @@ CREATE PROCEDURE MyProcedure()
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
+        -- Code to handle the exception goes here
+        -- You can access error information using GET DIAGNOSTICS or SQLSTATE
+        -- For example, GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        -- Insert error information into an error log table, print an error message, etc.
+    END;
+
+    -- Your main procedure code here
+    -- ...
+
+    -- If an error condition arises, you can raise an exception
+    IF some_condition THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Custom error message';
+    END IF;
+
+    -- ...
+
+    -- Continue with your procedure
+END //
+
+DELIMITER ;
+
+
+
+DELIMITER //
+
+CREATE PROCEDURE MyProcedure()
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
         -- Error occurred, insert error information into the error log table
         INSERT INTO error_log (error_message, error_code)
         VALUES (CONCAT('Error: ', SQLSTATE), SQLSTATE);
