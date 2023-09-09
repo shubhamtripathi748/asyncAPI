@@ -1,3 +1,47 @@
+DELIMITER //
+CREATE PROCEDURE ConvertAndStoreDate()
+BEGIN
+    -- Declare variables for the date conversion
+    DECLARE source_date VARCHAR(10);
+    DECLARE formatted_date DATE;
+
+    -- Cursor to iterate through the table
+    DECLARE done INT DEFAULT 0;
+    DECLARE cur CURSOR FOR SELECT date_string FROM my_table;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+
+    -- Loop through the table rows
+    read_loop: LOOP
+        FETCH cur INTO source_date;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Convert the VARCHAR date to DATE format
+        SET formatted_date = STR_TO_DATE(source_date, '%Y-%m-%d');
+
+        -- Insert or update the formatted date in the table
+        UPDATE my_table
+        SET formatted_date = formatted_date
+        WHERE date_string = source_date;
+    END LOOP;
+
+    CLOSE cur;
+END //
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
 
 -- Start a transaction
 START TRANSACTION;
