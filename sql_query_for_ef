@@ -1,3 +1,13 @@
+ DECLARE result VARCHAR(255);
+
+    SET result = CASE 
+        WHEN input_value = 1 THEN 'Value is 1'
+        WHEN input_value = 2 THEN 'Value is 2'
+        ELSE 'Value is neither 1 nor 2'
+    END;
+
+-------------------------------
+
 CREATE TABLE error_log (
     error_id INT AUTO_INCREMENT PRIMARY KEY,
     error_message TEXT,
