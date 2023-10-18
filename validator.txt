@@ -1,3 +1,35 @@
+CREATE DEFINER=`root`@`localhost` PROCEDURE `YourStoredProcedure`()
+BEGIN
+    -- Declare variables to store query results
+   DECLARE var1 VARCHAR(255);
+   DECLARE var2 VARCHAR(255);
+   DECLARE var3 VARCHAR(255);
+    -- ... other variables ...
+ -- Your SQL query to retrieve data and store it in the variable
+    SELECT salary INTO var1 FROM amazon_employees WHERE emp_id=1 LIMIT 1;
+	SELECT address INTO var2 FROM customer WHERE customer_id=1 LIMIT 1;
+    SELECT address INTO var3 FROM customer WHERE customer_id=1222222 LIMIT 1;
+  IF var1 IS NULL OR var1 = '' THEN
+        SET var1 = 'var1';
+    END IF; 
+  IF var2 IS NULL OR var1 = '' THEN
+        SET var2 = 'var2';
+    END IF;
+   IF var3 IS NULL OR var1 = '' THEN
+        SET var3 = 'var3';
+    END IF;    
+    
+    -- Sample usage:
+     SELECT var1, var2,var3;
+END
+
+
+
+
+
+
+
+--------------------------------------------------------------------------
 <dependencies>
     <dependency>
         <groupId>javax.validation</groupId>
